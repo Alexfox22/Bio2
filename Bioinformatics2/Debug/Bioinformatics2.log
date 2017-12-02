@@ -1,4 +1,6 @@
 ﻿  Source1.cpp
 c:\users\nika-\documents\visual studio 2015\projects\bioinformatics2\bioinformatics2\source1.cpp(146): warning C4018: <: несоответствие типов со знаком и без знака
 c:\users\nika-\documents\visual studio 2015\projects\bioinformatics2\bioinformatics2\source1.cpp(157): warning C4018: <: несоответствие типов со знаком и без знака
+c:\users\nika-\documents\visual studio 2015\projects\bioinformatics2\bioinformatics2\source1.cpp(201): warning C4018: <: несоответствие типов со знаком и без знака
+c:\users\nika-\documents\visual studio 2015\projects\bioinformatics2\bioinformatics2\source1.cpp(206): warning C4018: <: несоответствие типов со знаком и без знака
   Bioinformatics2.vcxproj -> C:\Users\nika-\Documents\Visual Studio 2015\Projects\Bioinformatics2\Debug\Bioinformatics2.exe

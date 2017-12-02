@@ -111,7 +111,7 @@ void show_matrix(int **mas, int strlen)
 }
 void consensus(int **mas, int *popopo, int strlen)
 {
-	cout << "consensus: " << endl;
+	//cout << "consensus: " << endl;
 	for (int i = 0;i < strlen;i++)
 	{
 		int maximus = -1;
@@ -124,7 +124,7 @@ void consensus(int **mas, int *popopo, int strlen)
 			}
 		}
 		popopo[i] = maximus;
-		cout << maximus << ' ';
+		//cout << maximus << ' ';
 	}
 }
 bool combination(int *mas, int tap, int m)
@@ -191,10 +191,25 @@ void main()
 
 		string sze; 
 		string cofstr;
+		string allbuf;
 	
-
-			getline(imfile, sze);
-			getline(imfile, cofstr);
+		cout << "Please, wait" << endl << endl;
+		getline(imfile, allbuf);
+		cout << allbuf << endl;
+		int loop = 0;
+		//cout << allbuf.find(" ",0)<<endl;
+		for(int i=0;i<allbuf.find(" ",0)+1;i++)
+		{
+			sze = sze + allbuf.substr(i, 1);
+		}
+		//cout << sze << endl;
+		for (int i=allbuf.find(" ",0)+1;i<allbuf.length();i++)
+		{
+			cofstr = cofstr + allbuf.substr(i, 1);
+		}
+		//cout <<  cofstr << endl;
+		/*	getline(imfile, sze);
+			getline(imfile, cofstr);*/
 			string *strs = new string[stoi(cofstr)];
 			for (int i = 0;i < stoi(cofstr);i++)
 			{
@@ -202,9 +217,11 @@ void main()
 				cout << strs[i] << endl;
 			}
 			int size = stoi(sze);  //длина мотива
-			cout << size << endl;
-			cout << cofstr << endl;
+			
+		/*	cout << size << endl;
+			cout << cofstr << endl;*/
 			int strlen = strs[0].size();
+			int timer = strlen - stoi(sze);
 			int **mas = new int*[4];
 
 			for (int i = 0;i < 4;i++)
@@ -217,31 +234,58 @@ void main()
 			}
 			int *ch = new int[stoi(cofstr)];//массив смещений
 			int *chbuf = new int[stoi(cofstr)];//массив смещений buffer
+			int *ch2 = new int[stoi(cofstr)];//массив смещений buffer
 			make_null(ch, stoi(cofstr));
 			make_null(chbuf, stoi(cofstr));
 			int maximum = 0;
 			int *d = new int[size];
-
+			bool twentyfive = false;
+			bool fifty = false;
+			bool seventyfive = false;
+			bool hundred = false;
 			bool g = true;
+			for (int e = 0;e < stoi(cofstr);e++)
+				 ch2[e] =1;
 				/*for (int j = 0;j < strlen - size;j++)
 				{*/while (g)
 				{
 					make_matrix(mas, size, stoi(cofstr), strs, ch);
 
-					cout << "bar:::::" << endl;
-					cout << "chbuf: " << endl;
-					for (int e = 0;e < stoi(cofstr);e++)
+					/*cout << "bar:::::" << endl;
+					cout << "chbuf: " << endl;*/
+				/*	for (int e = 0;e < stoi(cofstr);e++)
 						cout << ch[e] << ' ';
-					cout << endl;
-					show_matrix(mas, size);
+					cout << endl;*/
+					//show_matrix(mas, size);
 					consensus(mas, d, size);
 					for (int l = 0;l < 4;l++)
 						make_null(mas[l], size);
 					/*ch[stoi(cofstr)-i-1]++;*/
 
-					g=combination(ch, strlen - size, stoi(cofstr));
-
-					cout << endl;
+					g=combination(ch2, strlen - size+1, stoi(cofstr));
+					for (int e = 0;e < stoi(cofstr);e++)
+						ch[e] = ch2[e] - 1;
+					if ((ch[0]==timer/4)&&(twentyfive==false))
+					{
+						cout << "<---- 25% done ---->" << endl;
+						twentyfive = true;
+					}
+					if ((ch[0] == timer / 2) && (fifty == false))
+					{
+						cout << "<---- 50% done ---->" << endl;
+						fifty = true;
+					}
+					if ((ch[0] == 3*timer / 4) && (seventyfive == false))
+					{
+						cout << "<---- 75% done ---->" << endl;
+						seventyfive = true;
+					}
+					if ((ch[0] == timer) && (hundred == false))
+					{
+						cout << "<---- 90% done ---->" << endl;
+						hundred = true;
+					}
+					//cout << endl;
 					int sumum = 0;
 					for (int k = 0;k < size;k++)
 					{
@@ -249,7 +293,7 @@ void main()
 						sumum = sumum + d[k];
 
 					}
-					cout << "sum: " << sumum << endl;
+				//	cout << "sum: " << sumum << endl;
 					if (sumum > maximum)
 					{
 						maximum = sumum;
@@ -258,7 +302,7 @@ void main()
 					}
 				}
 
-				cout << "maximum: " << maximum << endl;
+			//	cout << "maximum: " << maximum << endl;
 
 			for (int i = 0;i < stoi(cofstr);i++)
 				result = result + strs[i].substr(chbuf[i], size) + '\n';

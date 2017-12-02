@@ -1,1 +1,5 @@
-GAC
+TTC
+ATC
+TTC
+GTC
+TCG
