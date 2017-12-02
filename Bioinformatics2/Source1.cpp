@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 struct maxim
@@ -13,6 +14,12 @@ struct maxim
 	int count;
 	int position;
 	char mean;
+};
+struct minim
+{
+	int count;
+	int position;
+	string mean;
 };
 int PatternCount(string text, string pattern)
 {
@@ -120,43 +127,46 @@ void consensus(int **mas, int *popopo, int strlen)
 		cout << maximus << ' ';
 	}
 }
-//int matmotive(int e,int strlen,int size)
-//{
-//	while (e != strlen - size)
-//	{
-//		e++;
-//
-//		return e++;
-//	}
-//	matmotive(e, strlen, size);
-//	
-//}
-bool NextSet(int *a, int n, int m)
+bool combination(int *mas, int tap, int m)
 {
 	int j = m - 1;
-	while (j >= 0 && a[j] == n) j--;
+	while (j >= 0 && mas[j] == tap) j--;
 	if (j < 0) return false;
-	if (a[j] >= n)
+	if (mas[j] >= tap)
 		j--;
-	a[j]++;
+	mas[j]++;
 	if (j == m - 1) return true;
 	for (int k = j + 1; k < m; k++)
-		a[k] = 1;
+		mas[k] = 1;
 	return true;
 }
-//bool NextSet(int *a, int n, int m)
-//{
-//	int j = m - 1;
-//	while (a[j] == n && j >= 0) j--;
-//	if (j < 0) return false;
-//	if (a[j] >= n)
-//		j--;
-//	a[j]++;
-//	if (j == m - 1) return true;
-//	for (int k = j + 1; k < m; k++)
-//		a[k] = a[j];
-//	return true;
-//}
+int Hamming(string text, string pat)
+{
+	int count = 0;
+	for (int i = 0;i < pat.length();i++)
+	{
+		if (text.substr(i, 1) != pat.substr(i, 1)) count++;
+	}
+	return count;
+}
+minim TotalDistance(string str, string pat,int *mas)
+{
+	minim min;
+	min.count= INT_MAX;
+	int k = INT_MAX;
+	for (int i = 0;i < str.length() - pat.length()+1;i++)
+	{
+		mas[i] = Hamming(str.substr(i, pat.length()), pat);
+		if (Hamming(str.substr(i, pat.length()), pat) < min.count)
+		{
+			min.count = Hamming(str.substr(i, pat.length()), pat);
+			
+			min.position = i;
+		}
+		
+	}
+	return min;
+}
 void main()
 {
 	int menu = -2;
@@ -164,9 +174,9 @@ void main()
 	ifstream imfile;
 	imfile.open("input.txt");
 	string text;
-	string res;
-	cout << "Press '0' to find pattern count " << endl;
-	cout << "Press '1' to find freqen words " << endl;
+	string result;
+	cout << "Press '0' to find with max " << endl;
+	cout << "Press '1' to find with min " << endl;
 	while ((menu != 0) && (menu != 1))
 	{
 		if (tried == true)
@@ -181,11 +191,8 @@ void main()
 
 		string sze; 
 		string cofstr;
-		string result;
-		//if (!imfile.is_open())
-		//	cout << "Cannot open'input.txt'";
-		//else
-		//{
+	
+
 			getline(imfile, sze);
 			getline(imfile, cofstr);
 			string *strs = new string[stoi(cofstr)];
@@ -214,8 +221,7 @@ void main()
 			make_null(chbuf, stoi(cofstr));
 			int maximum = 0;
 			int *d = new int[size];
-			/*for (int i = 0;i < stoi(cofstr);i++)
-			{*/
+
 			bool g = true;
 				/*for (int j = 0;j < strlen - size;j++)
 				{*/while (g)
@@ -232,7 +238,9 @@ void main()
 					for (int l = 0;l < 4;l++)
 						make_null(mas[l], size);
 					/*ch[stoi(cofstr)-i-1]++;*/
-					g=NextSet(ch, strlen - size, stoi(cofstr));
+
+					g=combination(ch, strlen - size, stoi(cofstr));
+
 					cout << endl;
 					int sumum = 0;
 					for (int k = 0;k < size;k++)
@@ -249,37 +257,125 @@ void main()
 
 					}
 				}
-				/*}*/
+
 				cout << "maximum: " << maximum << endl;
-			/*	for (int l = 0;l < i;i++)
-					ch[stoi(cofstr) - l] = 0;*/
-				
-			/*}*/
+
 			for (int i = 0;i < stoi(cofstr);i++)
 				result = result + strs[i].substr(chbuf[i], size) + '\n';
 			cout << result;
-			ofstream exfile;
-			exfile.open("output.txt");
-			exfile << result;
-		//}
+
 	}
 	if (menu == 1)
 	{
-		string count;
-
-		if (!imfile.is_open())
-			cout << "Cannot open'input.txt'";
-		else
+		ifstream imfile2;
+		imfile2.open("input.txt");
+		string buf;
+		int kit = 0;
+		while (imfile2)
 		{
-			getline(imfile, text);
-			getline(imfile, count);
+			getline(imfile2, buf);
+			kit++;
 		}
-		res = FreqentWords(text, stoi(count));
+		imfile2.close();
+		ifstream imfile;
+		imfile.open("input.txt");
+		string count;
+		string DNK;
+		string sze;
+		int coun;
+		minim resic;
+		resic.count = INT_MAX;
+			getline(imfile, sze);
+			cout << sze << endl;
+			int sizeofpattern=stoi(sze);
+			
+		/*	getline(imfile, count);
+			cout << count << endl;*/
+			coun = kit-2;
+			string *strs = new string[coun];
+			for (int i = 0;i < coun;i++)
+			{
+				getline(imfile, strs[i]);
+				cout << strs[i] << endl;
+			}
+			
+		int k = 0;
+		int len = strs[0].length();
+		int **mas = new int*[coun];
+		cout << coun << "  <----coun    ";
+		cout << len << "  <----len"<<endl;
+		for (int i=0;i<coun;i++)
+		{
+			mas[i] = new int[len];
+		}
+		for (int i = 0;i < coun;i++)
+		{
+			for (int j = 0;j < len ;j++)
+			{
+				mas[i][j]=0;
+			}
+
+		}
+		string pat;
+		char *symb = new char[4];
+		symb[0] = 'A';
+		symb[1] = 'C';
+		symb[2] = 'G';
+		symb[3] = 'T';
+		bool rere=true;
+		string nul;
+		int *comb = new int[sizeofpattern];
+		for (int i = 0;i < sizeofpattern-1;i++)
+			comb[i] = 1;
+			comb[sizeofpattern-1] = 0;
+		minim *minimus =new minim[coun];
+		while (rere) 
+		{
+			
+			rere = combination(comb, 4, sizeofpattern);
+			//for (int i = 0;i < sizeofpattern;i++)
+				//cout << comb[i] << "  -- ";
+			//cout << endl;
+			for (int k = 0;k < sizeofpattern;k++)
+				pat = pat + symb[comb[k] - 1];
+			//cout << "<--" << pat << "-->" << endl;
+			for (int i = 0;i < coun;i++)
+			{
+				minimus[i] = TotalDistance(strs[i], pat, mas[i]);
+			}
+			int sum = 0;
+			for (int i = 0;i < coun;i++)
+			{
+				sum=sum+minimus[i].count;
+			}
+			for (int i = 0;i < coun;i++)
+			{
+				
+				for (int j = 0;j < len - sizeofpattern + 1;j++)
+				{
+
+					//cout << mas[i][j] << "  ";
+				}
+				if (sum < resic.count)
+				{
+					resic.count = sum;
+					resic.mean = pat;
+				}
+				//cout << "| " << minimus[i].count << endl;
+				
+			}
+			pat = nul;
+
+		}
+		cout << resic.count << "____" << resic.mean << endl;
+		result = resic.mean;
+
 	}
+
 	ofstream exfile;
 	exfile.open("output.txt");
-	//	exfile << res;
-
-	imfile.close();
+	exfile << result;
 	exfile.close();
+	imfile.close();
+
 }
